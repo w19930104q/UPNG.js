@@ -44,8 +44,9 @@ This function does not do any optimizations, it just stores what you give it. Th
 
 Supports all color types (including Grayscale and Palettes), all channel depths (1, 2, 4, 8, 16), interlaced images etc. Opens PNGs which other libraries can not open (tested with [PngSuite](http://www.schaik.com/pngsuite/)).
 
-#### `UPNG.decode(buffer)`
+#### `UPNG.decode(buffer, [opts])`
 * `buffer`: ArrayBuffer containing the PNG file
+* `opts`: optional malformed-input protections (see below)
 * returns an image object with following properties:
 * * `width`: the width of the image
 * * `height`: the height of the image
@@ -56,6 +57,19 @@ Supports all color types (including Grayscale and Palettes), all channel depths 
 * * `data`: pixel data of the image
 
 PNG files may have a various number of channels and a various color depth. The interpretation of `data` depends on the current color type and color depth (see the [PNG specification](https://www.w3.org/TR/PNG/)).
+
+##### Protection against malformed files
+
+A malformed PNG can declare absurd dimensions (a decompression bomb) or contain truncated / corrupted chunks. `UPNG.decode()` validates the input and throws a clear `Error` **before** any pixel-sized buffer is allocated. The defaults live in `UPNG.decodeLimits` and can be overridden per call:
+
+    UPNG.decode(buff, {maxPixels: 1<<26, checkCRC: true});
+
+* `maxWidth`, `maxHeight`: maximum allowed width / height (default `1<<24` = 16777216; checked for the canvas and for every APNG frame)
+* `maxPixels`: maximum allowed width × height (default `1<<28` = 268435456, ~1 GB of RGBA output)
+* `checkChunkLength`: verify that each declared chunk length fits into the input (default `false`)
+* `checkCRC`: verify the CRC of every chunk (default `false`; implies the chunk-length sanity check)
+
+Set a numeric limit to `0` to disable it. Valid files are decoded exactly as before, regardless of these options.
 
 #### `UPNG.toRGBA8(img)`
 * `img`: PNG image object (returned by UPNG.decode())

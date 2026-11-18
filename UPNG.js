@@ -21,6 +21,37 @@ var UPNG = (function() {
 		}
 	}
 
+	// --- protection against malformed PNGs (decompression bombs, bogus chunks) ---
+	var _crcTab = (function() {
+		var tab = new Uint32Array(256);
+		for(var n=0; n<256; n++) {  var c=n;  for(var k=0; k<8; k++)  c = (c&1) ? (0xedb88320^(c>>>1)) : (c>>>1);  tab[n]=c;  }
+		return tab;
+	})();
+	function _crc32(buf, off, len) {
+		var c = 0xffffffff;
+		for(var i=0; i<len; i++)  c = _crcTab[(c^buf[off+i])&255] ^ (c>>>8);
+		return (c^0xffffffff)>>>0;
+	}
+	// Default safety limits of the decoder.  Override them per call through
+	// UPNG.decode(buffer, opts), or globally through UPNG.decodeLimits.
+	// Set a numeric limit to 0 (or null) to disable it.
+	var _decodeLimits = {
+		maxWidth : 1<<24,	// 16777216 pixels
+		maxHeight: 1<<24,	// 16777216 pixels
+		maxPixels: 1<<28,	// 268435456 pixels (~1 GB of RGBA output)
+		checkChunkLength: false,	// verify that declared chunk lengths fit into the input
+		checkCRC: false				// verify the CRC of every chunk
+	};
+	// Throws a clear error BEFORE any pixel-sized buffer is allocated.
+	function _checkDims(w, h, lim, what) {
+		if(typeof w!="number" || typeof h!="number" || !(w>0) || !(h>0) || (w%1)!=0 || (h%1)!=0)
+			throw new Error("UPNG: "+what+" has invalid dimensions ("+w+" x "+h+")");
+		if(lim.maxWidth  && w>lim.maxWidth )  throw new Error("UPNG: "+what+" width "+w+" exceeds the limit of "+lim.maxWidth+" pixels");
+		if(lim.maxHeight && h>lim.maxHeight)  throw new Error("UPNG: "+what+" height "+h+" exceeds the limit of "+lim.maxHeight+" pixels");
+		if(lim.maxPixels && w*h>lim.maxPixels)
+			throw new Error("UPNG: "+what+" area "+w+" x "+h+" ("+(w*h)+" pixels) exceeds the limit of "+lim.maxPixels+" pixels");
+	}
+
 	function toRGBA8(out)
 	{
 		var w = out.width, h = out.height;
@@ -114,9 +145,12 @@ var UPNG = (function() {
 
 
 
-	function decode(buff)
+	function decode(buff, opts)
 	{
 		var data = new Uint8Array(buff), offset = 8, bin = _bin, rUs = bin.readUshort, rUi = bin.readUint;
+		var lim = {};
+		for(var k in _decodeLimits) lim[k] = _decodeLimits[k];
+		if(opts!=null) for(var k in opts) lim[k] = opts[k];
 		var out = {tabs:{}, frames:[]};
 		var dd = new Uint8Array(data.length), doff = 0;	 // put all IDAT data into it
 		var fd, foff = 0;	// frames
@@ -129,8 +163,18 @@ var UPNG = (function() {
 			var len  = bin.readUint(data, offset);  offset += 4;
 			var type = bin.readASCII(data, offset, 4);  offset += 4;
 			//console.log(type,len);
-			
-			if     (type=="IHDR")  {  _IHDR(data, offset, out);  }
+
+			if(lim.checkChunkLength || lim.checkCRC) {	// CRC verification also requires the chunk to be complete
+				var remain = data.length-offset;
+				if(len>0x7fffffff || len+4>remain)
+					throw new Error("UPNG: chunk \""+type+"\" at offset "+(offset-8)+" declares a length of "+len+" bytes, but only "+Math.max(0,remain-4)+" data bytes remain in the file");
+			}
+			if(lim.checkCRC) {
+				var scrc = bin.readUint(data, offset+len), ccrc = _crc32(data, offset-4, len+4);
+				if(scrc!==ccrc)  throw new Error("UPNG: CRC check failed for chunk \""+type+"\" (stored 0x"+scrc.toString(16)+", computed 0x"+ccrc.toString(16)+")");
+			}
+
+			if     (type=="IHDR")  {  _IHDR(data, offset, out);  _checkDims(out.width, out.height, lim, "image");  }
 			else if(type=="iCCP")  {
 				var off = offset;  while(data[off]!=0) off++;
 				var nam = bin.readASCII(data,offset,off-offset);
@@ -154,6 +198,7 @@ var UPNG = (function() {
 					fr.data = _decompress(out, fd.slice(0,foff), fr.rect.width, fr.rect.height);  foff=0;
 				}
 				var rct = {x:rUi(data, offset+12),y:rUi(data, offset+16),width:rUi(data, offset+4),height:rUi(data, offset+8)};
+				_checkDims(rct.width, rct.height, lim, "frame");
 				var del = rUs(data, offset+22);  del = rUs(data, offset+20) / (del==0?100:del);
 				var frm = {rect:rct, delay:Math.round(del*1000), dispose:data[offset+24], blend:data[offset+25]};
 				//console.log(frm);
@@ -230,7 +275,8 @@ var UPNG = (function() {
 		}
 		if(foff!=0) {  var fr = out.frames[out.frames.length-1];
 			fr.data = _decompress(out, fd.slice(0,foff), fr.rect.width, fr.rect.height);
-		}	
+		}
+		if(out.width==null)  throw new Error("UPNG: the file contains no IHDR chunk");
 		out.data = _decompress(out, dd, out.width, out.height);
 		
 		delete out.compress;  delete out.interlace;  delete out.filter;
@@ -436,6 +482,7 @@ if(G>r)r=G;i++}while(i<y){A[i<<1]=0;A[(i<<1)+1]=0;i++}return r}return v}();
 	return {
 		decode:decode,
 		toRGBA8:toRGBA8,
+		decodeLimits:_decodeLimits,
 		_paeth:_paeth,
 		_copyTile:_copyTile,
 		_bin:_bin
