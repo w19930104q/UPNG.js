@@ -239,7 +239,10 @@ var UPNG = (function() {
 
 	function _decompress(out, dd, w, h) {
 		var time = Date.now();
-		var bpp = _getBPP(out), bpl = Math.ceil(w*bpp/8), buff = new Uint8Array((bpl+1+out.interlace)*h);
+		var bpp = _getBPP(out), bpl = Math.ceil(w*bpp/8);
+		var buff;
+		if(out.interlace==1) buff = new Uint8Array(_interlaceSize(w, h, bpp));
+		else                 buff = new Uint8Array((bpl+1)*h);
 		if(out.tabs["CgBI"]) dd = inflateRaw(dd,buff);
 		else                 dd = _inflate(dd,buff);
 		//console.log(dd.length, buff.length);
@@ -250,6 +253,25 @@ var UPNG = (function() {
 		else if(out.interlace==1) dd = _readInterlace(dd, out);
 		//console.log(Date.now()-time);
 		return dd;
+	}
+
+	// exact number of inflated bytes of an Adam7 stream: one filter byte plus
+	// ceil(sw*bpp/8) data bytes per scanline of each non-empty pass.
+	// Empty passes (zero-width or zero-height) contribute no bytes.
+	function _interlaceSize(w, h, bpp) {
+		var starting_row  = [ 0, 0, 4, 0, 2, 0, 1 ];
+		var starting_col  = [ 0, 4, 0, 2, 0, 1, 0 ];
+		var row_increment = [ 8, 8, 8, 4, 4, 2, 2 ];
+		var col_increment = [ 8, 8, 4, 4, 2, 2, 1 ];
+		var size = 0;
+		for(var pass=0; pass<7; pass++) {
+			var cr = starting_row[pass], sh = 0;
+			while(cr<h) { cr += row_increment[pass]; sh++; }
+			var cc = starting_col[pass], sw = 0;
+			while(cc<w) { cc += col_increment[pass]; sw++; }
+			if(sw!=0 && sh!=0) size += sh * (1 + Math.ceil(sw*bpp/8));
+		}
+		return size;
 	}
 
 	function _inflate(data, buff) {  var out=inflateRaw(new Uint8Array(data.buffer, 2,data.length-6),buff);  return out;  }
@@ -308,6 +330,10 @@ if(G>r)r=G;i++}while(i<y){A[i<<1]=0;A[(i<<1)+1]=0;i++}return r}return v}();
 			var sw = 0, sh = 0;
 			var cr = starting_row[pass];  while(cr<h) {  cr+=ri;  sh++;  }
 			var cc = starting_col[pass];  while(cc<w) {  cc+=ci;  sw++;  }
+			// empty pass: no scanlines exist in the stream, so it carries no
+			// bytes and must not be filtered or advance the data offset
+			if(sw==0 || sh==0) { pass++; continue; }
+
 			var bpll = Math.ceil(sw*bpp/8);
 			_filterZero(data, out, di, sw, sh);
 
@@ -339,7 +365,7 @@ if(G>r)r=G;i++}while(i<y){A[i<<1]=0;A[(i<<1)+1]=0;i++}return r}return v}();
 				}
 				y++;  row += ri;
 			}
-			if(sw*sh!=0) di += sh * (1 + bpll);
+			di += sh * (1 + bpll);
 			pass = pass + 1;
 		}
 		return img;
@@ -352,13 +378,16 @@ if(G>r)r=G;i++}while(i<y){A[i<<1]=0;A[(i<<1)+1]=0;i++}return r}return v}();
 
 	function _filterZero(data, out, off, w, h)
 	{
+		// an empty pass has no scanlines: nothing to filter, and reading a
+		// "filter byte" here would corrupt the first byte of the next pass
+		if(w==0 || h==0) return data;
 		var bpp = _getBPP(out), bpl = Math.ceil(w*bpp/8);
 		bpp = Math.ceil(bpp/8);
-		
+
 		var i,di, type=data[off], x=0;
-		
-		if(type>1) data[off]=[0,0,1][type-2];  
-		if(type==3) for(x=bpp; x<bpl; x++) data[x+1] = (data[x+1] + (data[x+1-bpp]>>>1) )&255;
+
+		if(type>1) data[off]=[0,0,1][type-2];
+		if(type==3) for(x=bpp; x<bpl; x++) data[off+x+1] = (data[off+x+1] + (data[off+x+1-bpp]>>>1) )&255;
 
 		for(var y=0; y<h; y++)  {
 			i = off+y*bpl; di = i+y+1;

@@ -21,5 +21,11 @@
   ],
   "dependencies": {
     "pako": "^1.0.5"
+  },
+  "scripts": {
+    "test:adam7:gen": "python3 test/adam7/gen_matrix.py",
+    "test:adam7:ref": "python3 test/adam7/ref_decode.py",
+    "test:adam7": "node test/adam7/run_accept.js",
+    "test": "npm run test:adam7:gen && npm run test:adam7:ref && npm run test:adam7"
   }
 }
