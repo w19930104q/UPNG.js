@@ -1,0 +1,250 @@
+{
+  "gray1": {
+    "w": 37,
+    "h": 23,
+    "ctype": 0,
+    "depth": 1,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "gray2": {
+    "w": 37,
+    "h": 23,
+    "ctype": 0,
+    "depth": 2,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "gray4": {
+    "w": 37,
+    "h": 23,
+    "ctype": 0,
+    "depth": 4,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "gray8": {
+    "w": 37,
+    "h": 23,
+    "ctype": 0,
+    "depth": 8,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "gray16": {
+    "w": 37,
+    "h": 23,
+    "ctype": 0,
+    "depth": 16,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "gray4_trns": {
+    "w": 37,
+    "h": 23,
+    "ctype": 0,
+    "depth": 4,
+    "trns": true,
+    "encoder": "raw"
+  },
+  "gray8_trns": {
+    "w": 37,
+    "h": 23,
+    "ctype": 0,
+    "depth": 8,
+    "trns": true,
+    "encoder": "raw"
+  },
+  "gray16_trns": {
+    "w": 37,
+    "h": 23,
+    "ctype": 0,
+    "depth": 16,
+    "trns": true,
+    "encoder": "raw"
+  },
+  "gray1_w8": {
+    "w": 8,
+    "h": 4,
+    "ctype": 0,
+    "depth": 1,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "gray1_w7": {
+    "w": 7,
+    "h": 4,
+    "ctype": 0,
+    "depth": 1,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "rgb8": {
+    "w": 37,
+    "h": 23,
+    "ctype": 2,
+    "depth": 8,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "rgb16": {
+    "w": 37,
+    "h": 23,
+    "ctype": 2,
+    "depth": 16,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "rgb8_trns": {
+    "w": 37,
+    "h": 23,
+    "ctype": 2,
+    "depth": 8,
+    "trns": true,
+    "encoder": "raw"
+  },
+  "rgb16_trns": {
+    "w": 37,
+    "h": 23,
+    "ctype": 2,
+    "depth": 16,
+    "trns": true,
+    "encoder": "raw"
+  },
+  "rgb8_filters": {
+    "w": 37,
+    "h": 23,
+    "ctype": 2,
+    "depth": 8,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "pal1": {
+    "w": 37,
+    "h": 23,
+    "ctype": 3,
+    "depth": 1,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "pal2": {
+    "w": 37,
+    "h": 23,
+    "ctype": 3,
+    "depth": 2,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "pal4": {
+    "w": 37,
+    "h": 23,
+    "ctype": 3,
+    "depth": 4,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "pal8": {
+    "w": 37,
+    "h": 23,
+    "ctype": 3,
+    "depth": 8,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "pal4_trns": {
+    "w": 37,
+    "h": 23,
+    "ctype": 3,
+    "depth": 4,
+    "trns": true,
+    "encoder": "raw"
+  },
+  "pal8_trns": {
+    "w": 37,
+    "h": 23,
+    "ctype": 3,
+    "depth": 8,
+    "trns": true,
+    "encoder": "raw"
+  },
+  "ga8": {
+    "w": 37,
+    "h": 23,
+    "ctype": 4,
+    "depth": 8,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "ga16": {
+    "w": 37,
+    "h": 23,
+    "ctype": 4,
+    "depth": 16,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "rgba8": {
+    "w": 37,
+    "h": 23,
+    "ctype": 6,
+    "depth": 8,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "rgba16": {
+    "w": 37,
+    "h": 23,
+    "ctype": 6,
+    "depth": 16,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "rgba8_1x1": {
+    "w": 1,
+    "h": 1,
+    "ctype": 6,
+    "depth": 8,
+    "trns": false,
+    "encoder": "raw"
+  },
+  "pil_l": {
+    "w": 37,
+    "h": 23,
+    "ctype": 0,
+    "depth": 8,
+    "trns": false,
+    "encoder": "pil"
+  },
+  "pil_i16": {
+    "w": 37,
+    "h": 23,
+    "ctype": 0,
+    "depth": 16,
+    "trns": false,
+    "encoder": "pil"
+  },
+  "pil_rgb": {
+    "w": 37,
+    "h": 23,
+    "ctype": 2,
+    "depth": 8,
+    "trns": false,
+    "encoder": "pil"
+  },
+  "pil_rgba": {
+    "w": 37,
+    "h": 23,
+    "ctype": 6,
+    "depth": 8,
+    "trns": false,
+    "encoder": "pil"
+  },
+  "pil_p": {
+    "w": 37,
+    "h": 23,
+    "ctype": 3,
+    "depth": 8,
+    "trns": true,
+    "encoder": "pil"
+  }
+}

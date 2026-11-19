@@ -1,0 +1,210 @@
+[
+  {
+    "name": "gray1",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "gray2",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "gray4",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "gray8",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "gray16",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "gray4_trns",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "gray8_trns",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "gray16_trns",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "gray1_w8",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "gray1_w7",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "rgb8",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "rgb16",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "rgb8_trns",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "rgb16_trns",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "rgb8_filters",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "pal1",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "pal2",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "pal4",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "pal8",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "pal4_trns",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "pal8_trns",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "ga8",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "ga16",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "rgba8",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "rgba16",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "rgba8_1x1",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "pil_l",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "pil_i16",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "pil_rgb",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "pil_rgba",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "pil_p",
+    "decode": "PASS",
+    "roundtrip": "PASS"
+  },
+  {
+    "name": "ll_gray8",
+    "decode": "n/a",
+    "roundtrip": "n/a",
+    "encodeLL": "written"
+  },
+  {
+    "name": "ll_gray16",
+    "decode": "n/a",
+    "roundtrip": "n/a",
+    "encodeLL": "written"
+  },
+  {
+    "name": "ll_ga8",
+    "decode": "n/a",
+    "roundtrip": "n/a",
+    "encodeLL": "written"
+  },
+  {
+    "name": "ll_ga16",
+    "decode": "n/a",
+    "roundtrip": "n/a",
+    "encodeLL": "written"
+  },
+  {
+    "name": "ll_rgb8",
+    "decode": "n/a",
+    "roundtrip": "n/a",
+    "encodeLL": "written"
+  },
+  {
+    "name": "ll_rgb16",
+    "decode": "n/a",
+    "roundtrip": "n/a",
+    "encodeLL": "written"
+  },
+  {
+    "name": "ll_rgba8",
+    "decode": "n/a",
+    "roundtrip": "n/a",
+    "encodeLL": "written"
+  },
+  {
+    "name": "ll_rgba16",
+    "decode": "n/a",
+    "roundtrip": "n/a",
+    "encodeLL": "written"
+  },
+  {
+    "name": "quantize64",
+    "decode": "PASS",
+    "roundtrip": "n/a"
+  }
+]
